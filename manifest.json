@@ -1,44 +1,13 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/>{
-  "name": "ResInvest Commodities - System Magazynowy",
-  "short_name": "ResInvest",
-  "description": "System zarządzania magazynem Pyskowice",
-  "start_url": "/resinvest-magazyn/",
+{
+  "background_color": "#3850f7",
+  "dir": "ltr",
   "display": "standalone",
-  "background_color": "#2563EB",
-  "theme_color": "#2563EB",
+  "name": "/https://roesnermateusz-cmyk.github.io/resinvest-magazyn/",
   "orientation": "any",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ],
-  "categories": ["business", "productivity"],
-  "shortcuts": [
-    {
-      "name": "Stan Magazynowy",
-      "url": "/resinvest-magazyn/#magazyn",
-      "description": "Szybki dostęp do stanu magazynowego"
-    },
-    {
-      "name": "Nowy dokument PZ",
-      "url": "/resinvest-magazyn/#dokumenty",
-      "description": "Dodaj nowy dokument przyjęcia"
-    }
-  ]
+  "scope": "/",
+  "short_name": "ResInvest Commodities",
+  "start_url": "/https://roesnermateusz-cmyk.github.io/resinvest-magazyn/",
+  "theme_color": "#1627ff",
+  "id": "ResInvest ",
+  "description": "Aplikacja mobilna dla liczenia stanów magazynowych."
 }
