@@ -1,31 +1,49 @@
 {
-  "id": "com.resinvest.magazyn.v1",
+  "id": "resinvest-magazyn-app-v1",
   "name": "ResInvest Commodities - System Magazynowy",
   "short_name": "ResInvest",
-  "description": "System zarządzania magazynem i listą obecności - Pyskowice",
+  "description": "Zaawansowany system zarządzania gospodarką magazynową ResInvest Commodities w Pyskowicach. Aplikacja umożliwia szybkie obliczanie metrów przestrzennych, wystawianie dokumentów PZ i WZ oraz prowadzenie elektronicznej listy obecności pracowników.",
   "lang": "pl-PL",
+  "dir": "ltr",
   "start_url": "/resinvest-magazyn/",
   "scope": "/resinvest-magazyn/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#2563EB",
   "theme_color": "#2563EB",
-  "orientation": "any",
   "categories": [
     "business",
     "productivity"
   ],
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "ikona-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "ikona-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Stan Magazynowy",
+      "url": "/resinvest-magazyn/#magazyn",
+      "description": "Sprawdź zapasy"
+    },
+    {
+      "name": "Nowy dokument",
+      "url": "/resinvest-magazyn/#dokumenty",
+      "description": "Przyjęcia i wydania"
+    },
+    {
+      "name": "Lista obecności",
+      "url": "/resinvest-magazyn/#obecnosc",
+      "description": "Ewidencja pracy"
     }
   ],
   "screenshots": [
@@ -34,32 +52,7 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Pulpit nawigacyjny stanu magazynowego"
-    },
-    {
-      "src": "screenshot-mobile.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobilny kalkulator metrów przestrzennych"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Stan Magazynowy",
-      "url": "/resinvest-magazyn/#magazyn",
-      "description": "Podgląd aktualnych stanów"
-    },
-    {
-      "name": "Nowy Dokument",
-      "url": "/resinvest-magazyn/#dokumenty",
-      "description": "Wystawianie PZ lub WZ"
-    },
-    {
-      "name": "Lista Obecności",
-      "url": "/resinvest-magazyn/#obecnosc",
-      "description": "Ewidencja czasu pracy"
+      "label": "Główny pulpit zarządzania magazynem ResInvest"
     }
   ]
 }
-
