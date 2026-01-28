@@ -1,7 +1,11 @@
 {
+  "id": "com.resinvest.magazyn.v1",
   "name": "ResInvest Commodities - System Magazynowy",
   "short_name": "ResInvest",
+  "description": "System zarządzania magazynem Pyskowice",
+  "lang": "pl-PL",
   "start_url": "/resinvest-magazyn/",
+  "scope": "/resinvest-magazyn/",
   "display": "standalone",
   "background_color": "#2563EB",
   "theme_color": "#2563EB",
@@ -11,7 +15,7 @@
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any" 
     },
     {
       "src": "icon-512.png",
@@ -20,16 +24,19 @@
       "purpose": "maskable"
     }
   ],
-  "description": "System zarządzania magazynem Pyskowice",
   "screenshots": [
     {
       "src": "screenshot1.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Ekran główny systemu"
+      "form_factor": "wide",
+      "label": "Widok główny systemu magazynowego"
     }
   ],
-  "categories": ["business", "productivity"],
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "shortcuts": [
     {
       "name": "Stan Magazynowy",
@@ -41,55 +48,5 @@
       "url": "/resinvest-magazyn/#dokumenty",
       "description": "Dodaj nowy dokument przyjęcia"
     }
-  ],
-  "id": "/resinvest-magazyn/",
-  "handle_links": "prefer-own",
-  "file_handlers": [
-    {
-      "action": "/resinvest-magazyn/import",
-      "accept": {
-        "text/csv": [".csv"],
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
-      }
-    }
-  ],
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  },
-  "share_target": {
-    "action": "/resinvest-magazyn/share",
-    "method": "GET",
-    "enctype": "application/x-www-form-urlencoded",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  },
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=com.resinvest.magazyn",
-      "id": "com.resinvest.magazyn"
-    }
-  ],
-  "prefer_related_applications": true,
-  "protocol_handlers": [
-    {
-      "protocol": "resinvest",
-      "url": "/resinvest-magazyn/protocol?data=%s"
-    }
-  ],
-  "note_taking": {
-    "new_note_url": "/resinvest-magazyn/new-note"
-  },
-  "scope": "/resinvest-magazyn/",
-  "lang": "pl",
-  "dir": "ltr",
-  "author": "ResInvest Commodities Sp. z o.o.",
-  "version": "2.1.0",
-  "display_override": ["standalone", "minimal-ui"],
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  ]
 }
