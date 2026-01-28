@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResInvest Commodities - Magazyn Pyskowice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <div class="bg-blue-600 text-white p-6">
+        <h1 class="text-2xl font-bold">ResInvest Commodities</h1>
+        <p>Magazyn Pyskowice</p>
+    </div>
+
+    <div class="bg-white shadow">
+        <div class="flex overflow-x-auto">
+            <button onclick="pokazZakladke('magazyn')" id="btn-magazyn" class="px-6 py-4 font-medium border-b-2 border-blue-600 text-blue-600">
+                📦 Stan Magazynowy
+            </button>
+            <button onclick="pokazZakladke('dokumenty')" id="btn-dokumenty" class="px-6 py-4 font-medium text-gray-600">
+                📄 Dokumenty
+            </button>
+            <button onclick="pokazZakladke('kalkulator')" id="btn-kalkulator" class="px-6 py-4 font-medium text-gray-600">
+                🧮 Kalkulator
+            </button>
+            <button onclick="pokazZakladke('obecnosc')" id="btn-obecnosc" class="px-6 py-4 font-medium text-gray-600">
+                👥 Obecność
+            </button>
+            <button onclick="pokazZakladke('historia')" id="btn-historia" class="px-6 py-4 font-medium text-gray-600">
+                📊 Historia
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6">
+        
+        <!-- MAGAZYN -->
+        <div id="magazyn" class="zakladka">
+            <h2 class="text-2xl font-bold mb-6">Stan Magazynowy</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                    <h3 class="text-green-800 font-semibold mb-2">PZ w tym miesiącu</h3>
+                    <p class="text-3xl font-bold text-green-600" id="pz-miesiac">0.00 m³</p>
+                </div>
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
+                    <h3 class="text-red-800 font-semibold mb-2">WZ w tym miesiącu</h3>
+                    <p class="text-3xl font-bold text-red-600" id="wz-miesiac">0.00 m³</p>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                    <h3 class="text-blue-800 font-semibold mb-2">Stan aktualny</h3>
+                    <p class="text-3xl font-bold text-blue-600" id="stan">0.00 m³</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOKUMENTY -->
+        <div id="dokumenty" class="zakladka" style="display:none">
+            <h2 class="text-2xl font-bold mb-6">Dokumenty magazynowe</h2>
+            <div id="przyciski-dok" class="flex gap-4 mb-6">
+                <button onclick="nowyDokument('PZ')" class="bg-green-600 text-white px-6 py-3 rounded-lg">Nowe PZ</button>
+                <button onclick="nowyDokument('WZ')" class="bg-red-600 text-white px-6 py-3 rounded-lg">Nowe WZ</button>
+            </div>
+            
+            <div id="formularz-dok" style="display:none" class="bg-white rounded-lg shadow p-6">
+                <div class="flex justify-between mb-4">
+                    <h3 class="text-xl font-bold" id="tytul-dok"></h3>
+                    <button onclick="zamknijFormularz()" class="text-2xl">✕</button>
+                </div>
+                <div class="mb-4 p-3 bg-blue-50 rounded">
+                    <strong id="numer-dok"></strong>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1">Data wystawienia</label>
+                        <input type="date" id="data-wyst" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1" id="label-data">Data</label>
+                        <input type="date" id="data-trans" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Nr rejestracyjny</label>
+                        <input type="text" id="nr-rej" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Oznaczenie</label>
+                        <input type="text" id="oznaczenie" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Ilość (m³)</label>
+                        <input type="number" step="0.01" id="ilosc" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1" id="label-kontr">Kontrahent</label>
+                        <input type="text" id="kontrahent" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1" id="label-podpis">Podpis</label>
+                        <input type="text" id="podpis" class="w-full border rounded px-3 py-2">
+                    </div>
+                </div>
+                <button onclick="zapiszDokument()" class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg">
+                    💾 Zapisz
+                </button>
+            </div>
+        </div>
+
+        <!-- KALKULATOR -->
+        <div id="kalkulator" class="zakladka" style="display:none">
+            <h2 class="text-2xl font-bold mb-6">Kalkulator mp</h2>
+            <div class="bg-white rounded-lg shadow p-6 max-w-md">
+                <p class="mb-4">Długość × Szerokość × Wysokość</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block mb-1">Długość (m)</label>
+                        <input type="number" step="0.01" id="dlugosc" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Szerokość (m)</label>
+                        <input type="number" step="0.01" id="szerokosc" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Wysokość (m)</label>
+                        <input type="number" step="0.01" id="wysokosc" class="w-full border rounded px-3 py-2">
+                    </div>
+                    <button onclick="oblicz()" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg">Oblicz</button>
+                    <div id="wynik-kalk" style="display:none" class="bg-green-50 border-2 border-green-200 rounded p-4">
+                        <p class="text-sm mb-1">Wynik:</p>
+                        <p class="text-3xl font-bold text-green-600" id="wynik-wartosc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OBECNOŚĆ -->
+        <div id="obecnosc" class="zakladka" style="display:none">
+            <div id="lista-pracownikow">
+                <h2 class="text-2xl font-bold mb-6">Lista Obecności</h2>
+                <div class="bg-white rounded-lg shadow p-6 max-w-md mb-6">
+                    <h3 class="font-bold mb-4">Dodaj pracownika</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="nowy-pracownik" placeholder="Imię i nazwisko" class="flex-1 border rounded px-3 py-2">
+                        <button onclick="dodajPracownika()" class="bg-blue-600 text-white px-4 py-2 rounded">➕ Dodaj</button>
+                    </div>
+                </div>
+                <h3 class="font-bold mb-3">Pracownicy</h3>
+                <div id="pracownicy"></div>
+            </div>
+
+            <div id="widok-miesiecy" style="display:none">
+                <div class="mb-6">
+                    <button onclick="powrotDoPracownikow()" class="text-blue-600 mb-2">← Powrót</button>
+                    <h2 class="text-2xl font-bold" id="nazwa-pracownika"></h2>
+                </div>
+                <div id="miesiace" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+            </div>
+
+            <div id="widok-kalendarza" style="display:none">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <button onclick="powrotDoMiesiecy()" class="text-blue-600 mb-2">← Powrót</button>
+                        <h2 class="text-2xl font-bold" id="tytul-kalendarza"></h2>
+                    </div>
+                    <button onclick="zapiszObecnosci()" class="bg-blue-600 text-white px-6 py-3 rounded-lg">💾 Zapisz zmiany</button>
+                </div>
+                <div class="bg-white rounded-lg shadow overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Data</th>
+                                <th class="px-4 py-3 text-left">Pracownik</th>
+                                <th class="px-4 py-3 text-left">Godziny</th>
+                                <th class="px-4 py-3 text-left">Podpis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-obecnosci"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORIA -->
+        <div id="historia" class="zakladka" style="display:none">
+            <h2 class="text-2xl font-bold mb-6">Historia dokumentów</h2>
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h3 class="font-bold mb-4">Podsumowanie</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="border-l-4 border-green-500 pl-4">
+                        <p class="text-sm text-gray-600">Łączne PZ</p>
+                        <p class="text-2xl font-bold text-green-600" id="suma-pz">0.00 m³</p>
+                    </div>
+                    <div class="border-l-4 border-red-500 pl-4">
+                        <p class="text-sm text-gray-600">Łączne WZ</p>
+                        <p class="text-2xl font-bold text-red-600" id="suma-wz">0.00 m³</p>
+                    </div>
+                    <div class="border-l-4 border-blue-500 pl-4">
+                        <p class="text-sm text-gray-600">Stan</p>
+                        <p class="text-2xl font-bold text-blue-600" id="suma-stan">0.00 m³</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Typ</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Numer</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Data</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Nr rej</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Oznaczenie</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Ilość</th>
+                            <th class="px-4 py-3 text-left text-xs uppercase">Kontrahent</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-historia"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+let dokumenty = JSON.parse(localStorage.getItem('dokumenty') || '[]');
+let pracownicy = JSON.parse(localStorage.getItem('pracownicy') || '[]');
+let obecnosci = JSON.parse(localStorage.getItem('obecnosci') || '{}');
+let licznikPZ = parseInt(localStorage.getItem('licznikPZ') || '1');
+let licznikWZ = parseInt(localStorage.getItem('licznikWZ') || '1');
+let aktualnyTyp = '';
+let wybranyPracownik = null;
+let wybranyMiesiac = null;
+let zmiany = {};
+
+const miesiace = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+const listaPracownikow = ['Mateusz Roesner','Jan Kowalski','Anna Nowak','Piotr Wiśniewski','Krzysztof Kowalczyk'];
+const godziny = ['6-14','7-15','8-16','9-17','10-18','14-22','15-23','16-00','22-6','23-7','Urlop','Zwolnienie','Wolne','-'];
+
+function pokazZakladke(nazwa) {
+    document.querySelectorAll('.zakladka').forEach(z => z.style.display = 'none');
+    document.querySelectorAll('button[id^="btn-"]').forEach(b => {
+        b.classList.remove('border-blue-600','text-blue-600');
+        b.classList.add('text-gray-600');
+    });
+    
+    document.getElementById(nazwa).style.display = 'block';
+    const btn = document.getElementById('btn-' + nazwa);
+    btn.classList.add('border-blue-600','text-blue-600');
+    btn.classList.remove('text-gray-600');
+    
+    if (nazwa === 'magazyn') aktualizujStatystyki();
+    if (nazwa === 'historia') aktualizujHistorie();
+    if (nazwa === 'obecnosc') { wybranyPracownik = null; wybranyMiesiac = null; pokazListePracownikow(); }
+}
+
+function aktualizujStatystyki() {
+    const teraz = new Date();
+    const m = teraz.getMonth();
+    const r = teraz.getFullYear();
+    let tpz=0, twz=0, mpz=0, mwz=0;
+    
+    dokumenty.forEach(d => {
+        const data = new Date(d.created);
+        const ile = parseFloat(d.ilosc) || 0;
+        if (d.typ === 'PZ') {
+            tpz += ile;
+            if (data.getMonth()===m && data.getFullYear()===r) mpz += ile;
+        } else {
+            twz += ile;
+            if (data.getMonth()===m && data.getFullYear()===r) mwz += ile;
+        }
+    });
+    
+    document.getElementById('pz-miesiac').textContent = mpz.toFixed(2) + ' m³';
+    document.getElementById('wz-miesiac').textContent = mwz.toFixed(2) + ' m³';
+    document.getElementById('stan').textContent = (tpz-twz).toFixed(2) + ' m³';
+    document.getElementById('suma-pz').textContent = tpz.toFixed(2) + ' m³';
+    document.getElementById('suma-wz').textContent = twz.toFixed(2) + ' m³';
+    document.getElementById('suma-stan').textContent = (tpz-twz).toFixed(2) + ' m³';
+}
+
+function nowyDokument(typ) {
+    aktualnyTyp = typ;
+    const nr = typ === 'PZ' ? licznikPZ : licznikWZ;
+    document.getElementById('przyciski-dok').style.display = 'none';
+    document.getElementById('formularz-dok').style.display = 'block';
+    document.getElementById('tytul-dok').textContent = typ === 'PZ' ? 'Przyjęcie (PZ)' : 'Wydanie (WZ)';
+    document.getElementById('numer-dok').textContent = `${typ}/${nr}/${new Date().getFullYear()}`;
+    document.getElementById('label-data').textContent = typ === 'PZ' ? 'Data przyjęcia' : 'Data wydania';
+    document.getElementById('label-kontr').textContent = typ === 'PZ' ? 'Dostawca' : 'Odbiorca';
+    document.getElementById('label-podpis').textContent = typ === 'PZ' ? 'Przyjął' : 'Wydał';
+    ['data-wyst','data-trans','nr-rej','oznaczenie','ilosc','kontrahent','podpis'].forEach(id => document.getElementById(id).value = '');
+}
+
+function zamknijFormularz() {
+    document.getElementById('przyciski-dok').style.display = 'flex';
+    document.getElementById('formularz-dok').style.display = 'none';
+}
+
+function zapiszDokument() {
+    const nr = aktualnyTyp === 'PZ' ? licznikPZ : licznikWZ;
+    const dok = {
+        typ: aktualnyTyp,
+        numer: `${aktualnyTyp}/${nr}/${new Date().getFullYear()}`,
+        dataWystawienia: document.getElementById('data-wyst').value,
+        dataTransakcji: document.getElementById('data-trans').value,
+        nrRejestracyjny: document.getElementById('nr-rej').value,
+        oznaczenie: document.getElementById('oznaczenie').value,
+        ilosc: document.getElementById('ilosc').value,
+        kontrahent: document.getElementById('kontrahent').value,
+        podpis: document.getElementById('podpis').value,
+        created: new Date().toISOString()
+    };
+    
+    dokumenty.push(dok);
+    if (aktualnyTyp === 'PZ') licznikPZ++; else licznikWZ++;
+    zapisz();
+    zamknijFormularz();
+    aktualizujStatystyki();
+    alert('Dokument zapisany!');
+}
+
+function oblicz() {
+    const d = parseFloat(document.getElementById('dlugosc').value);
+    const s = parseFloat(document.getElementById('szerokosc').value);
+    const w = parseFloat(document.getElementById('wysokosc').value);
+    if (d && s && w) {
+        document.getElementById('wynik-wartosc').textContent = (d*s*w).toFixed(2) + ' m³';
+        document.getElementById('wynik-kalk').style.display = 'block';
+    } else alert('Wypełnij wszystkie pola');
+}
+
+function dodajPracownika() {
+    const nazwa = document.getElementById('nowy-pracownik').value.trim();
+    if (nazwa) {
+        pracownicy.push({id: Date.now(), nazwa: nazwa});
+        zapisz();
+        document.getElementById('nowy-pracownik').value = '';
+        renderujPracownikow();
+    }
+}
+
+function renderujPracownikow() {
+    const div = document.getElementById('pracownicy');
+    div.innerHTML = '';
+    pracownicy.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'bg-white rounded-lg shadow p-4 mb-3 flex justify-between items-center cursor-pointer hover:shadow-md';
+        el.innerHTML = `
+            <div onclick="wybierzPracownika(${p.id})" class="flex items-center gap-3">
+                <span class="text-2xl">👤</span>
+                <span class="font-medium text-lg">${p.nazwa}</span>
+            </div>
+            <button onclick="event.stopPropagation(); usunPracownika(${p.id})" class="text-red-600">🗑️</button>
+        `;
+        div.appendChild(el);
+    });
+}
+
+function usunPracownika(id) {
+    if (confirm('Usunąć?')) {
+        pracownicy = pracownicy.filter(p => p.id !== id);
+        zapisz();
+        renderujPracownikow();
+    }
+}
+
+function wybierzPracownika(id) {
+    wybranyPracownik = pracownicy.find(p => p.id === id);
+    pokazMiesiace();
+}
+
+function pokazMiesiace() {
+    document.getElementById('lista-pracownikow').style.display = 'none';
+    document.getElementById('widok-miesiecy').style.display = 'block';
+    document.getElementById('nazwa-pracownika').textContent = wybranyPracownik.nazwa + ' - 2026';
+    
+    const div = document.getElementById('miesiace');
+    div.innerHTML = '';
+    miesiace.forEach((m,i) => {
+        const btn = document.createElement('button');
+        btn.className = 'bg-white rounded-lg shadow p-6 hover:shadow-lg';
+        btn.innerHTML = `<div class="font-bold text-lg">${m}</div><div class="text-sm text-gray-500">2026</div>`;
+        btn.onclick = () => wybierzMiesiac(i);
+        div.appendChild(btn);
+    });
+}
+
+function wybierzMiesiac(m) {
+    wybranyMiesiac = m;
+    pokazKalendarz();
+}
+
+function pokazKalendarz() {
+    document.getElementById('widok-miesiecy').style.display = 'none';
+    document.getElementById('widok-kalendarza').style.display = 'block';
+    document.getElementById('tytul-kalendarza').textContent = `${wybranyPracownik.nazwa} - ${miesiace[wybranyMiesiac]} 2026`;
+    
+    const tbody = document.getElementById('tabela-obecnosci');
+    tbody.innerHTML = '';
+    const dni = new Date(2026, wybranyMiesiac+1, 0).getDate();
+    
+    for (let d=1; d<=dni; d++) {
+        const klucz = `${wybranyPracownik.id}-${wybranyMiesiac}-${d}`;
+        const dane = obecnosci[klucz] || {pracownik:'',godziny:'',podpis:''};
+        const data = `${d.toString().padStart(2,'0')}.${(wybranyMiesiac+1).toString().padStart(2,'0')}.2026`;
+        
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50';
+        tr.innerHTML = `
+            <td class="px-4 py-3 font-medium">${data}</td>
+            <td class="px-4 py-3">
+                <select onchange="zaznaczZmiane('${klucz}','pracownik',this.value)" class="w-full border rounded px-3 py-2">
+                    <option value="">Wybierz</option>
+                    ${listaPracownikow.map(p => `<option value="${p}" ${dane.pracownik===p?'selected':''}>${p}</option>`).join('')}
+  
