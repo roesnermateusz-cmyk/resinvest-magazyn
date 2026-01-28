@@ -3,412 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResInvest Commodities - Magazyn Pyskowice</title>
+    <meta name="description" content="System zarządzania magazynem ResInvest Commodities - Magazyn Pyskowice">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ResInvest">
+    
+    <title>ResInvest Commodities - System Magazynowy</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" href="icon-192.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+        }
+        .tab-button.active {
+            background-color: #EFF6FF !important;
+            color: #2563EB !important;
+            border-bottom: 2px solid #2563EB !important;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block !important;
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body class="bg-gray-50">
     
-    <div class="bg-blue-600 text-white p-6">
+    <div class="bg-blue-600 text-white p-6 shadow-lg">
         <h1 class="text-2xl font-bold">ResInvest Commodities</h1>
-        <p>Magazyn Pyskowice</p>
+        <p class="text-blue-100">Magazyn Pyskowice</p>
     </div>
 
-    <div class="bg-white shadow">
-        <div class="flex overflow-x-auto">
-            <button onclick="pokazZakladke('magazyn')" id="btn-magazyn" class="px-6 py-4 font-medium border-b-2 border-blue-600 text-blue-600">
-                📦 Stan Magazynowy
+    <div class="bg-white shadow-md overflow-x-auto no-print">
+        <div class="flex min-w-max">
+            <button onclick="switchTab('magazyn')" class="tab-button active flex items-center gap-2 px-6 py-4 font-medium transition-colors text-gray-600 hover:bg-gray-50">
+                <span>📦</span><span>Stan Magazynowy</span>
             </button>
-            <button onclick="pokazZakladke('dokumenty')" id="btn-dokumenty" class="px-6 py-4 font-medium text-gray-600">
-                📄 Dokumenty
+            <button onclick="switchTab('dokumenty')" class="tab-button flex items-center gap-2 px-6 py-4 font-medium transition-colors text-gray-600 hover:bg-gray-50">
+                <span>📄</span><span>Dokumenty</span>
             </button>
-            <button onclick="pokazZakladke('kalkulator')" id="btn-kalkulator" class="px-6 py-4 font-medium text-gray-600">
-                🧮 Kalkulator
+            <button onclick="switchTab('kalkulator')" class="tab-button flex items-center gap-2 px-6 py-4 font-medium transition-colors text-gray-600 hover:bg-gray-50">
+                <span>🧮</span><span>Kalkulator mp</span>
             </button>
-            <button onclick="pokazZakladke('obecnosc')" id="btn-obecnosc" class="px-6 py-4 font-medium text-gray-600">
-                👥 Obecność
+            <button onclick="switchTab('obecnosc')" class="tab-button flex items-center gap-2 px-6 py-4 font-medium transition-colors text-gray-600 hover:bg-gray-50">
+                <span>👥</span><span>Obecność</span>
             </button>
-            <button onclick="pokazZakladke('historia')" id="btn-historia" class="px-6 py-4 font-medium text-gray-600">
-                📊 Historia
+            <button onclick="switchTab('historia')" class="tab-button flex items-center gap-2 px-6 py-4 font-medium transition-colors text-gray-600 hover:bg-gray-50">
+                <span>📊</span><span>Historia</span>
             </button>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto p-6">
+    <div class="max-w-7xl mx-auto p-4 md:p-6">
         
-        <!-- MAGAZYN -->
-        <div id="magazyn" class="zakladka">
-            <h2 class="text-2xl font-bold mb-6">Stan Magazynowy</h2>
-            <div class="grid md:grid-cols-3 gap-4">
-                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-                    <h3 class="text-green-800 font-semibold mb-2">PZ w tym miesiącu</h3>
-                    <p class="text-3xl font-bold text-green-600" id="pz-miesiac">0.00 m³</p>
+        <!-- Stan Magazynowy -->
+        <div id="tab-magazyn" class="tab-content active">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Stan Magazynowy</h2>
+                    <button onclick="generateWarehousePDF()" class="no-print bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        ⬇️ Generuj raport
+                    </button>
                 </div>
-                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
-                    <h3 class="text-red-800 font-semibold mb-2">WZ w tym miesiącu</h3>
-                    <p class="text-3xl font-bold text-red-600" id="wz-miesiac">0.00 m³</p>
-                </div>
-                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-                    <h3 class="text-blue-800 font-semibold mb-2">Stan aktualny</h3>
-                    <p class="text-3xl font-bold text-blue-600" id="stan">0.00 m³</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- DOKUMENTY -->
-        <div id="dokumenty" class="zakladka" style="display:none">
-            <h2 class="text-2xl font-bold mb-6">Dokumenty magazynowe</h2>
-            <div id="przyciski-dok" class="flex gap-4 mb-6">
-                <button onclick="nowyDokument('PZ')" class="bg-green-600 text-white px-6 py-3 rounded-lg">Nowe PZ</button>
-                <button onclick="nowyDokument('WZ')" class="bg-red-600 text-white px-6 py-3 rounded-lg">Nowe WZ</button>
-            </div>
-            
-            <div id="formularz-dok" style="display:none" class="bg-white rounded-lg shadow p-6">
-                <div class="flex justify-between mb-4">
-                    <h3 class="text-xl font-bold" id="tytul-dok"></h3>
-                    <button onclick="zamknijFormularz()" class="text-2xl">✕</button>
-                </div>
-                <div class="mb-4 p-3 bg-blue-50 rounded">
-                    <strong id="numer-dok"></strong>
-                </div>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block mb-1">Data wystawienia</label>
-                        <input type="date" id="data-wyst" class="w-full border rounded px-3 py-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                        <h3 class="text-green-800 font-semibold mb-2">PZ w tym miesiącu</h3>
+                        <p class="text-3xl font-bold text-green-600" id="monthly-pz">0.00 m³</p>
                     </div>
-                    <div>
-                        <label class="block mb-1" id="label-data">Data</label>
-                        <input type="date" id="data-trans" class="w-full border rounded px-3 py-2">
+                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
+                        <h3 class="text-red-800 font-semibold mb-2">WZ w tym miesiącu</h3>
+                        <p class="text-3xl font-bold text-red-600" id="monthly-wz">0.00 m³</p>
                     </div>
-                    <div>
-                        <label class="block mb-1">Nr rejestracyjny</label>
-                        <input type="text" id="nr-rej" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1">Oznaczenie</label>
-                        <input type="text" id="oznaczenie" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1">Ilość (m³)</label>
-                        <input type="number" step="0.01" id="ilosc" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1" id="label-kontr">Kontrahent</label>
-                        <input type="text" id="kontrahent" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1" id="label-podpis">Podpis</label>
-                        <input type="text" id="podpis" class="w-full border rounded px-3 py-2">
-                    </div>
-                </div>
-                <button onclick="zapiszDokument()" class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg">
-                    💾 Zapisz
-                </button>
-            </div>
-        </div>
-
-        <!-- KALKULATOR -->
-        <div id="kalkulator" class="zakladka" style="display:none">
-            <h2 class="text-2xl font-bold mb-6">Kalkulator mp</h2>
-            <div class="bg-white rounded-lg shadow p-6 max-w-md">
-                <p class="mb-4">Długość × Szerokość × Wysokość</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block mb-1">Długość (m)</label>
-                        <input type="number" step="0.01" id="dlugosc" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1">Szerokość (m)</label>
-                        <input type="number" step="0.01" id="szerokosc" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block mb-1">Wysokość (m)</label>
-                        <input type="number" step="0.01" id="wysokosc" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <button onclick="oblicz()" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg">Oblicz</button>
-                    <div id="wynik-kalk" style="display:none" class="bg-green-50 border-2 border-green-200 rounded p-4">
-                        <p class="text-sm mb-1">Wynik:</p>
-                        <p class="text-3xl font-bold text-green-600" id="wynik-wartosc"></p>
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                        <h3 class="text-blue-800 font-semibold mb-2">Stan aktualny</h3>
+                        <p class="text-3xl font-bold text-blue-600" id="current-stock">0.00 m³</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- OBECNOŚĆ -->
-        <div id="obecnosc" class="zakladka" style="display:none">
-            <div id="lista-pracownikow">
-                <h2 class="text-2xl font-bold mb-6">Lista Obecności</h2>
-                <div class="bg-white rounded-lg shadow p-6 max-w-md mb-6">
-                    <h3 class="font-bold mb-4">Dodaj pracownika</h3>
+        <!-- Dokumenty -->
+        <div id="tab-dokumenty" class="tab-content">
+            <div class="space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800">Dokumenty magazynowe</h2>
+                
+                <div id="doc-buttons" class="flex gap-4">
+                    <button onclick="showDocForm('PZ')" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                        Nowe PZ (Przyjęcie)
+                    </button>
+                    <button onclick="showDocForm('WZ')" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+                        Nowe WZ (Wydanie)
+                    </button>
+                </div>
+
+                <div id="doc-form" class="hidden bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800" id="doc-form-title"></h3>
+                        <button onclick="hideDocForm()" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+
+                    <div class="mb-4 p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-700">Numer dokumentu: <strong id="doc-number-preview"></strong></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data wystawienia</label>
+                            <input type="date" id="doc-data-wyst" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" id="doc-data-label">Data</label>
+                            <input type="date" id="doc-data-trans" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nr rejestracyjny pojazdu</label>
+                            <input type="text" id="doc-nr-rej" placeholder="GLE 1234" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Oznaczenie towaru</label>
+                            <input type="text" id="doc-oznaczenie" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ilość (m³)</label>
+                            <input type="number" step="0.01" id="doc-ilosc" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" id="doc-kontr-label">Kontrahent</label>
+                            <input type="text" id="doc-kontrahent" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" id="doc-podpis-label">Podpis</label>
+                            <input type="text" id="doc-podpis" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button onclick="saveDocument()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            💾 Zapisz dokument
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kalkulator -->
+        <div id="tab-kalkulator" class="tab-content">
+            <div class="space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800">Kalkulator metrów przestrzennych</h2>
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md">
+                    <p class="text-gray-600 mb-2">Oblicz objętość zrębki drzewnej</p>
+                    <p class="text-sm text-gray-500 mb-4">Wzór: Długość × Szerokość × Wysokość</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Długość (m)</label>
+                            <input type="number" step="0.01" id="calc-d" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Szerokość (m)</label>
+                            <input type="number" step="0.01" id="calc-s" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Wysokość (m)</label>
+                            <input type="number" step="0.01" id="calc-h" class="w-full border rounded-lg px-3 py-2">
+                        </div>
+                        <button onclick="calculate()" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700">
+                            Oblicz objętość
+                        </button>
+                        <div id="calc-wynik" class="hidden bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                            <p class="text-sm text-gray-600 mb-1">Wynik:</p>
+                            <p class="text-3xl font-bold text-green-600" id="calc-value"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Obecność -->
+        <div id="tab-obecnosc" class="tab-content">
+            <div id="emp-list" class="space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800">Lista Obecności</h2>
+                
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md">
+                    <h3 class="font-bold text-lg mb-4">Dodaj pracownika</h3>
                     <div class="flex gap-2">
-                        <input type="text" id="nowy-pracownik" placeholder="Imię i nazwisko" class="flex-1 border rounded px-3 py-2">
-                        <button onclick="dodajPracownika()" class="bg-blue-600 text-white px-4 py-2 rounded">➕ Dodaj</button>
+                        <input type="text" id="new-emp" placeholder="Imię i nazwisko" class="flex-1 border rounded-lg px-3 py-2">
+                        <button onclick="addEmployee()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            ➕ Dodaj
+                        </button>
                     </div>
                 </div>
-                <h3 class="font-bold mb-3">Pracownicy</h3>
-                <div id="pracownicy"></div>
-            </div>
 
-            <div id="widok-miesiecy" style="display:none">
-                <div class="mb-6">
-                    <button onclick="powrotDoPracownikow()" class="text-blue-600 mb-2">← Powrót</button>
-                    <h2 class="text-2xl font-bold" id="nazwa-pracownika"></h2>
+                <div class="space-y-3">
+                    <h3 class="font-bold text-lg">Pracownicy</h3>
+                    <div id="emp-container"></div>
                 </div>
-                <div id="miesiace" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
             </div>
 
-            <div id="widok-kalendarza" style="display:none">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <button onclick="powrotDoMiesiecy()" class="text-blue-600 mb-2">← Powrót</button>
-                        <h2 class="text-2xl font-bold" id="tytul-kalendarza"></h2>
+            <div id="month-view" class="hidden space-y-6">
+                <div class="flex items-center gap-4">
+                    <button onclick="backToEmpList()" class="text-blue-600 hover:text-blue-800 font-medium">← Powrót</button>
+                    <h2 class="text-2xl font-bold text-gray-800" id="emp-name-title"></h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="months-grid"></div>
+            </div>
+
+            <div id="calendar-view" class="hidden space-y-6">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div class="flex items-center gap-4">
+                        <button onclick="backToMonths()" class="text-blue-600 hover:text-blue-800 font-medium">← Powrót</button>
+                        <h2 class="text-2xl font-bold text-gray-800" id="calendar-title"></h2>
                     </div>
-                    <button onclick="zapiszObecnosci()" class="bg-blue-600 text-white px-6 py-3 rounded-lg">💾 Zapisz zmiany</button>
+                    <div class="flex gap-2 no-print">
+                        <button onclick="printCalendar()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            🖨️ Drukuj
+                        </button>
+                        <button onclick="exportCalendar()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                            ⬇️ PDF
+                        </button>
+                    </div>
                 </div>
-                <div class="bg-white rounded-lg shadow overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left">Data</th>
-                                <th class="px-4 py-3 text-left">Pracownik</th>
-                                <th class="px-4 py-3 text-left">Godziny</th>
-                                <th class="px-4 py-3 text-left">Podpis</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabela-obecnosci"></tbody>
-                    </table>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Data</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Pracownik</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Godziny</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Podpis</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendar-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flex justify-end no-print">
+                    <button onclick="saveAttendance()" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 text-lg font-medium">
+                        💾 Zapisz wszystkie zmiany
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- HISTORIA -->
-        <div id="historia" class="zakladka" style="display:none">
-            <h2 class="text-2xl font-bold mb-6">Historia dokumentów</h2>
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h3 class="font-bold mb-4">Podsumowanie</h3>
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="border-l-4 border-green-500 pl-4">
-                        <p class="text-sm text-gray-600">Łączne PZ</p>
-                        <p class="text-2xl font-bold text-green-600" id="suma-pz">0.00 m³</p>
-                    </div>
-                    <div class="border-l-4 border-red-500 pl-4">
-                        <p class="text-sm text-gray-600">Łączne WZ</p>
-                        <p class="text-2xl font-bold text-red-600" id="suma-wz">0.00 m³</p>
-                    </div>
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <p class="text-sm text-gray-600">Stan</p>
-                        <p class="text-2xl font-bold text-blue-600" id="suma-stan">0.00 m³</p>
+        <!-- Historia -->
+        <div id="tab-historia" class="tab-content">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Historia dokumentów</h2>
+                    <button onclick="generateHistoryPDF()" class="no-print bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        ⬇️ Generuj raport
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="font-bold text-lg mb-4">Podsumowanie</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <p class="text-sm text-gray-600">Łączne PZ</p>
+                            <p class="text-2xl font-bold text-green-600" id="total-pz">0.00 m³</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <p class="text-sm text-gray-600">Łączne WZ</p>
+                            <p class="text-2xl font-bold text-red-600" id="total-wz">0.00 m³</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <p class="text-sm text-gray-600">Stan</p>
+                            <p class="text-2xl font-bold text-blue-600" id="total-stock">0.00 m³</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="bg-white rounded-lg shadow overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Typ</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Numer</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Data</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Nr rej</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Oznaczenie</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Ilość</th>
-                            <th class="px-4 py-3 text-left text-xs uppercase">Kontrahent</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-historia"></tbody>
-                </table>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Typ</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Numer</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nr rej.</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Oznaczenie</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ilość</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kontrahent</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Podpis</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-<script>
-let dokumenty = JSON.parse(localStorage.getItem('dokumenty') || '[]');
-let pracownicy = JSON.parse(localStorage.getItem('pracownicy') || '[]');
-let obecnosci = JSON.parse(localStorage.getItem('obecnosci') || '{}');
-let licznikPZ = parseInt(localStorage.getItem('licznikPZ') || '1');
-let licznikWZ = parseInt(localStorage.getItem('licznikWZ') || '1');
-let aktualnyTyp = '';
-let wybranyPracownik = null;
-let wybranyMiesiac = null;
-let zmiany = {};
+    <script>
+        // DANE GLOBALNE
+        let docs = [];
+        let employees = [];
+        let attendance = {};
+        let pzCnt = 1;
+        let wzCnt = 1;
+        let currentDocType = '';
+        let selectedEmp = null;
+        let selectedMth = null;
+        let pendingChanges = {};
 
-const miesiace = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
-const listaPracownikow = ['Mateusz Roesner','Jan Kowalski','Anna Nowak','Piotr Wiśniewski','Krzysztof Kowalczyk'];
-const godziny = ['6-14','7-15','8-16','9-17','10-18','14-22','15-23','16-00','22-6','23-7','Urlop','Zwolnienie','Wolne','-'];
+        const months = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+        const empList = ['Mateusz Roesner','Jan Kowalski','Anna Nowak','Piotr Wiśniewski','Krzysztof Kowalczyk'];
+        const hours = ['6-14','7-15','8-16','9-17','10-18','14-22','15-23','16-00','22-6','23-7','Urlop','Zwolnienie','Wolne','-'];
 
-function pokazZakladke(nazwa) {
-    document.querySelectorAll('.zakladka').forEach(z => z.style.display = 'none');
-    document.querySelectorAll('button[id^="btn-"]').forEach(b => {
-        b.classList.remove('border-blue-600','text-blue-600');
-        b.classList.add('text-gray-600');
-    });
-    
-    document.getElementById(nazwa).style.display = 'block';
-    const btn = document.getElementById('btn-' + nazwa);
-    btn.classList.add('border-blue-600','text-blue-600');
-    btn.classList.remove('text-gray-600');
-    
-    if (nazwa === 'magazyn') aktualizujStatystyki();
-    if (nazwa === 'historia') aktualizujHistorie();
-    if (nazwa === 'obecnosc') { wybranyPracownik = null; wybranyMiesiac = null; pokazListePracownikow(); }
-}
+        // INICJALIZACJA
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromStorage();
+            updateStats();
+            renderEmployees();
+            updateHistory();
+        });
 
-function aktualizujStatystyki() {
-    const teraz = new Date();
-    const m = teraz.getMonth();
-    const r = teraz.getFullYear();
-    let tpz=0, twz=0, mpz=0, mwz=0;
-    
-    dokumenty.forEach(d => {
-        const data = new Date(d.created);
-        const ile = parseFloat(d.ilosc) || 0;
-        if (d.typ === 'PZ') {
-            tpz += ile;
-            if (data.getMonth()===m && data.getFullYear()===r) mpz += ile;
-        } else {
-            twz += ile;
-            if (data.getMonth()===m && data.getFullYear()===r) mwz += ile;
+        // STORAGE
+        function loadFromStorage() {
+            try {
+                docs = JSON.parse(localStorage.getItem('docs') || '[]');
+                employees = JSON.parse(localStorage.getItem('employees') || '[]');
+                attendance = JSON.parse(localStorage.getItem('attendance') || '{}');
+                pzCnt = parseInt(localStorage.getItem('pzCnt') || '1');
+                wzCnt = parseInt(localStorage.getItem('wzCnt') || '1');
+            } catch(e) { console.error('Load error:', e); }
         }
-    });
-    
-    document.getElementById('pz-miesiac').textContent = mpz.toFixed(2) + ' m³';
-    document.getElementById('wz-miesiac').textContent = mwz.toFixed(2) + ' m³';
-    document.getElementById('stan').textContent = (tpz-twz).toFixed(2) + ' m³';
-    document.getElementById('suma-pz').textContent = tpz.toFixed(2) + ' m³';
-    document.getElementById('suma-wz').textContent = twz.toFixed(2) + ' m³';
-    document.getElementById('suma-stan').textContent = (tpz-twz).toFixed(2) + ' m³';
-}
 
-function nowyDokument(typ) {
-    aktualnyTyp = typ;
-    const nr = typ === 'PZ' ? licznikPZ : licznikWZ;
-    document.getElementById('przyciski-dok').style.display = 'none';
-    document.getElementById('formularz-dok').style.display = 'block';
-    document.getElementById('tytul-dok').textContent = typ === 'PZ' ? 'Przyjęcie (PZ)' : 'Wydanie (WZ)';
-    document.getElementById('numer-dok').textContent = `${typ}/${nr}/${new Date().getFullYear()}`;
-    document.getElementById('label-data').textContent = typ === 'PZ' ? 'Data przyjęcia' : 'Data wydania';
-    document.getElementById('label-kontr').textContent = typ === 'PZ' ? 'Dostawca' : 'Odbiorca';
-    document.getElementById('label-podpis').textContent = typ === 'PZ' ? 'Przyjął' : 'Wydał';
-    ['data-wyst','data-trans','nr-rej','oznaczenie','ilosc','kontrahent','podpis'].forEach(id => document.getElementById(id).value = '');
-}
+        function saveToStorage() {
+            localStorage.setItem('docs', JSON.stringify(docs));
+            localStorage.setItem('employees', JSON.stringify(employees));
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+            localStorage.setItem('pzCnt', pzCnt);
+            localStorage.setItem('wzCnt', wzCnt);
+        }
 
-function zamknijFormularz() {
-    document.getElementById('przyciski-dok').style.display = 'flex';
-    document.getElementById('formularz-dok').style.display = 'none';
-}
-
-function zapiszDokument() {
-    const nr = aktualnyTyp === 'PZ' ? licznikPZ : licznikWZ;
-    const dok = {
-        typ: aktualnyTyp,
-        numer: `${aktualnyTyp}/${nr}/${new Date().getFullYear()}`,
-        dataWystawienia: document.getElementById('data-wyst').value,
-        dataTransakcji: document.getElementById('data-trans').value,
-        nrRejestracyjny: document.getElementById('nr-rej').value,
-        oznaczenie: document.getElementById('oznaczenie').value,
-        ilosc: document.getElementById('ilosc').value,
-        kontrahent: document.getElementById('kontrahent').value,
-        podpis: document.getElementById('podpis').value,
-        created: new Date().toISOString()
-    };
-    
-    dokumenty.push(dok);
-    if (aktualnyTyp === 'PZ') licznikPZ++; else licznikWZ++;
-    zapisz();
-    zamknijFormularz();
-    aktualizujStatystyki();
-    alert('Dokument zapisany!');
-}
-
-function oblicz() {
-    const d = parseFloat(document.getElementById('dlugosc').value);
-    const s = parseFloat(document.getElementById('szerokosc').value);
-    const w = parseFloat(document.getElementById('wysokosc').value);
-    if (d && s && w) {
-        document.getElementById('wynik-wartosc').textContent = (d*s*w).toFixed(2) + ' m³';
-        document.getElementById('wynik-kalk').style.display = 'block';
-    } else alert('Wypełnij wszystkie pola');
-}
-
-function dodajPracownika() {
-    const nazwa = document.getElementById('nowy-pracownik').value.trim();
-    if (nazwa) {
-        pracownicy.push({id: Date.now(), nazwa: nazwa});
-        zapisz();
-        document.getElementById('nowy-pracownik').value = '';
-        renderujPracownikow();
-    }
-}
-
-function renderujPracownikow() {
-    const div = document.getElementById('pracownicy');
-    div.innerHTML = '';
-    pracownicy.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'bg-white rounded-lg shadow p-4 mb-3 flex justify-between items-center cursor-pointer hover:shadow-md';
-        el.innerHTML = `
-            <div onclick="wybierzPracownika(${p.id})" class="flex items-center gap-3">
-                <span class="text-2xl">👤</span>
-                <span class="font-medium text-lg">${p.nazwa}</span>
-            </div>
-            <button onclick="event.stopPropagation(); usunPracownika(${p.id})" class="text-red-600">🗑️</button>
-        `;
-        div.appendChild(el);
-    });
-}
-
-function usunPracownika(id) {
-    if (confirm('Usunąć?')) {
-        pracownicy = pracownicy.filter(p => p.id !== id);
-        zapisz();
-        renderujPracownikow();
-    }
-}
-
-function wybierzPracownika(id) {
-    wybranyPracownik = pracownicy.find(p => p.id === id);
-    pokazMiesiace();
-}
-
-function pokazMiesiace() {
-    document.getElementById('lista-pracownikow').style.display = 'none';
-    document.getElementById('widok-miesiecy').style.display = 'block';
-    document.getElementById('nazwa-pracownika').textContent = wybranyPracownik.nazwa + ' - 2026';
-    
-    const div = document.getElementById('miesiace');
-    div.innerHTML = '';
-    miesiace.forEach((m,i) => {
-        const btn = document.createElement('button');
-        btn.className = 'bg-white rounded-lg shadow p-6 hover:shadow-lg';
-        btn.innerHTML = `<div class="font-bold text-lg">${m}</div><div class="text-sm text-gray-500">2026</div>`;
-        btn.onclick = () => wybierzMiesiac(i);
-        div.appendChild(btn);
-    });
-}
-
-function wybierzMiesiac(m) {
-    wybranyMiesiac = m;
-    pokazKalendarz();
-}
-
-function pokazKalendarz() {
-    document.getElementById('widok-miesiecy').style.display = 'none';
-    document.getElementById('widok-kalendarza').style.display = 'block';
-    document.getElementById('tytul-kalendarza').textContent = `${wybranyPracownik.nazwa} - ${miesiace[wybranyMiesiac]} 2026`;
-    
-    const tbody = document.getElementById('tabela-obecnosci');
-    tbody.innerHTML = '';
-    const dni = new Date(2026, wybranyMiesiac+1, 0).getDate();
-    
-    for (let d=1; d<=dni; d++) {
-        const klucz = `${wybranyPracownik.id}-${wybranyMiesiac}-${d}`;
-        const dane = obecnosci[klucz] || {pracownik:'',godziny:'',podpis:''};
-        const data = `${d.toString().padStart(2,'0')}.${(wybranyMiesiac+1).toString().padStart(2,'0')}.2026`;
-        
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-gray-50';
-        tr.innerHTML = `
-            <td class="px-4 py-3 font-medium">${data}</td>
-            <td class="px-4 py-3">
-                <select onchange="zaznaczZmiane('${klucz}','pracownik',this.value)" class="w-full border rounded px-3 py-2">
-                    <option value="">Wybierz</option>
-                    ${listaPracownikow.map(p => `<option value="${p}" ${dane.pracownik===p?'selected':''}>${p}</option>`).join('')}
-  
+        // ZAKŁADKI
+        function switchTab(name) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            const tab = document.getElementById('tab-' + name);
+            if (tab) tab.classList.add('active');
+            
+            event.target.closest('.tab-button').classList.add('active');
+            
+            if (name === 'magazyn') updateStats();
+            if (name === 'historia') updateHistory();
+            if (na
